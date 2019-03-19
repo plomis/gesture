@@ -1,5 +1,5 @@
 {
-  "name": "gesture",
+  "name": "@plomis/gesture",
   "version": "1.0.0",
   "description": "gesture",
   "main": "lib/gesture.js",
