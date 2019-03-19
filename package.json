@@ -6,7 +6,7 @@
   "module": "es/gesture.esm.js",
   "scripts": {
     "dev": "parcel src/index.html -p 8080",
-    "build": "parcel build src/index.html -d dist --public-url /gesture/dist/",
+    "build": "rimraf dist && parcel build src/index.html -d dist --public-url /gesture/dist/",
     "compile": "rimraf lib && rimraf es && node rollup.config.js"
   },
   "files": [
