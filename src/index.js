@@ -185,25 +185,17 @@ Gesture.prototype._initMouseEvent = function() {
       }
     );
   } else {
-    this.touchCancel = addEventListener(
-      this.canvas,
-      "touchcanel",
-      (event) => this._handleTouchCancel(event)
+    this.touchCancel = addEventListener(this.canvas, "touchcanel", event =>
+      this._handleTouchCancel(event)
     );
-    this.touchEnd = addEventListener(
-      this.canvas,
-      "touchend",
-      (event) => this._handleTouchCancel(event)
+    this.touchEnd = addEventListener(this.canvas, "touchend", event =>
+      this._handleTouchCancel(event)
     );
-    this.touchMove = addEventListener(
-      this.canvas,
-      "touchmove",
-      (event) => this._handleTouchMove(event)
+    this.touchMove = addEventListener(this.canvas, "touchmove", event =>
+      this._handleTouchMove(event)
     );
-    this.touchStart = addEventListener(
-      this.canvas,
-      "touchstart",
-      (event) => this._handleTouchStart(event)
+    this.touchStart = addEventListener(this.canvas, "touchstart", event =>
+      this._handleTouchStart(event)
     );
   }
 };
@@ -386,6 +378,7 @@ Gesture.prototype.changeState = function(v) {
 
 Gesture.prototype.reset = function() {
   this.hitPoints = [];
+  this.state = "normal";
   this._draw();
 };
 
