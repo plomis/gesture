@@ -1,6 +1,6 @@
 {
   "name": "@plomis/gesture",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "gesture",
   "main": "lib/gesture.js",
   "module": "es/gesture.esm.js",
