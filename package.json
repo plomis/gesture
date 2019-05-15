@@ -6,7 +6,7 @@
   "module": "es/index.js",
   "scripts": {
     "clean": "rimraf lib dist es",
-    "dev": "cross-env BABEL_ENV=umd parcel example/index.html -p 8080",
+    "dev": "cross-env BABEL_ENV=umd parcel example/index.html -p 8080 -d demo",
     "example": "rimraf dist && parcel build example/index.html -d demo --public-url /gesture/demo/",
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
