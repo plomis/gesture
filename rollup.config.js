@@ -1,90 +1,52 @@
-const path = require("path");
-const rollup = require("rollup");
-const version = require("./package.json").version;
-const babel = require("rollup-plugin-babel");
-const nodeResolve = require("rollup-plugin-node-resolve");
-const commonjs = require("rollup-plugin-commonjs");
-const { uglify } = require("rollup-plugin-uglify");
+import nodeResolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+import replace from 'rollup-plugin-replace';
+import { uglify } from 'rollup-plugin-uglify';
+import babel from 'rollup-plugin-babel';
+import { version } from './package.json';
 
-function resolve(p) {
-  return path.resolve(__dirname, "./", p);
-}
+const banner = `/*!
+ * plomis-gesture v${version}
+ * (c) 2019-${new Date().getFullYear()} Plomis
+ * Released under the MIT License.
+ */
+`;
 
-const banner =
-  "/*!\n" +
-  " * gesture v" +
-  version +
-  "\n" +
-  " * (c) 2019-" +
-  new Date().getFullYear() +
-  " Plomis\n" +
-  " * Released under the MIT License.\n" +
-  " */";
+const env = process.env.NODE_ENV;
 
-let inputOptions = {
-  input: resolve("src/index.js"),
+const config = {
+  input: 'src/index.js',
+  output: {
+    banner,
+    format: 'umd',
+    name: 'plomis-gesture',
+    file: './dist/plomis-gesture.js',
+    globals: {}
+  },
+  external: [],
   plugins: [
-    nodeResolve(),
     babel({
-      exclude: "node_modules/**"
+      exclude: 'node_modules/**'
     }),
-    commonjs({
-      include: "node_modules/**"
+    nodeResolve(),
+    commonjs(),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify( env )
     })
   ]
 };
 
-const outputOptions = [
-  {
-    file: resolve("lib/gesture.js"),
-    format: "umd",
-    name: "Gesture",
-    banner
-  },
-  {
-    file: resolve("lib/gesture.min.js"),
-    format: "umd",
-    name: "Gesture",
-    banner
-  },
-  {
-    file: resolve("es/gesture.esm.js"),
-    format: "es",
-    name: "Gesture",
-    banner
-  }
-];
-
-async function build(output) {
-  try {
-    const isProd = /min\.js$/.test(output.file);
-    if (isProd) {
-      // create a bundle
-      const bundle = await rollup.rollup({
-        ...inputOptions,
-        plugins: [
-          ...inputOptions.plugins,
-          uglify({
-            compress: {
-              pure_getters: true,
-              unsafe: true,
-              unsafe_comps: true,
-              warnings: false
-            }
-          })
-        ]
-      });
-      // or write the bundle to disk
-      await bundle.write(output);
-    } else {
-      // create a bundle
-      const bundle = await rollup.rollup(inputOptions);
-      // or write the bundle to disk
-      await bundle.write(output);
-    }
-  } catch (e) {
-    console.log(e);
-  }
+if ( env === 'production' ) {
+  config.plugins.push(
+    uglify({
+      compress: {
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true/* ,
+        warnings: false */
+      }
+    })
+  );
 }
 
-outputOptions.forEach(c => build(c));
+export default config;
